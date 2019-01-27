@@ -2,21 +2,29 @@
   "name": "component-bootstrap",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "watch": "tsc --watch"
   },
-  "author": "",
+  "author": "Tomek Buszewski",
   "license": "ISC",
   "dependencies": {
-    "prompt": "^1.0.0",
-    "prompts": "^2.0.1",
-    "typescript": "^3.2.4"
+    "prompts": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=10.12"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
-    "tslint": "^5.12.1"
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4"
+  },
+  "bootstrap": {
+    "stateful": "containers",
+    "stateless": "components",
+    "defaults": "defaults",
+    "extension": "ts"
   }
 }
