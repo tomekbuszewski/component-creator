@@ -1,0 +1,10 @@
+.idea/
+node_modules/
+/2018-10-09_server_errors.log
+/2018-10-08_server_combined.log
+/2018-10-09_server_combined.log
+/coverage
+*.log
+/yarn-error.log
+*.map
+src/index.js
