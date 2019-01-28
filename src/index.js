@@ -18,6 +18,10 @@ var Arguments;
 (function (Arguments) {
     Arguments["name"] = "--name";
 })(Arguments || (Arguments = {}));
+const fileExists = (file) => {
+    const { existsSync } = require("fs");
+    return existsSync(file);
+};
 const extractArgument = (argument, arguments = process.argv) => {
     const argumentPosition = arguments.indexOf(argument);
     if (argumentPosition >= 0) {
@@ -28,16 +32,17 @@ const extractArgument = (argument, arguments = process.argv) => {
 const createFile = (name, content = "") => {
     const { stdout } = process;
     if (typeof name === "undefined") {
-        stdout.write("Please pass the path!\r");
-        return false;
+        throw new Error("Please pass the path!\r");
+    }
+    if (fileExists(name)) {
+        throw new Error(`File "${name}" already exists!\r`);
     }
     const { promises, writeFile } = require("fs");
     const { dirname } = require("path");
     promises.mkdir(dirname(name), { recursive: true }).then(() => {
         writeFile(name, content, (err) => {
             if (err) {
-                console.error(err);
-                return false;
+                throw new Error(`Errors creating file: ${JSON.stringify(err)}`);
             }
             stdout.write("File(s) created!\r");
             return true;
@@ -111,6 +116,11 @@ const questions = [
     const { name, isClass } = yield prompts(questions);
     const { stateful, stateless, defaults, extension } = getConfig();
     const basePath = isClass ? stateful : stateless;
-    generateFiles(basePath, extension, getTemplates(defaults), name, isClass);
+    try {
+        generateFiles(basePath, extension, getTemplates(defaults), name, isClass);
+    }
+    catch (e) {
+        console.error(e);
+    }
 }))();
 //# sourceMappingURL=index.js.map

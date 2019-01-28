@@ -19,9 +19,9 @@ const ${name} = (props: Props): React.ReactNode => (
   </div>
 );
 
-const Styled${name} = styled(${name})\\\`\\\`
+const Styled${name} = styled(${name})\`\`;
 
 export default Styled${name};
- `;
+`;
 
 module.exports = (name) => component(name);

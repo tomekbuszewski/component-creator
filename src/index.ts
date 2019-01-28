@@ -45,6 +45,12 @@ interface Config {
   stateful: string;
 }
 
+const fileExists = (file: string): boolean => {
+  const { existsSync } = require("fs");
+
+  return existsSync(file);
+};
+
 const extractArgument = (argument: Arguments, arguments: string[] = process.argv): string => {
   const argumentPosition: number = arguments.indexOf(argument);
 
@@ -57,8 +63,13 @@ const extractArgument = (argument: Arguments, arguments: string[] = process.argv
 
 const createFile = (name: string, content: string = ""): boolean => {
   const { stdout } = process;
+
   if (typeof name === "undefined") {
-    stdout.write("Please pass the path!\r"); return false;
+    throw new Error("Please pass the path!\r");
+  }
+
+  if (fileExists(name)) {
+    throw new Error(`File "${name}" already exists!\r`);
   }
 
   const { promises, writeFile } = require("fs");
@@ -67,8 +78,7 @@ const createFile = (name: string, content: string = ""): boolean => {
   promises.mkdir(dirname(name), { recursive: true }).then(() => {
     writeFile(name, content, (err: Error) => {
       if (err) {
-        console.error(err);
-        return false;
+        throw new Error(`Errors creating file: ${JSON.stringify(err)}`);
       }
 
       stdout.write("File(s) created!\r");
@@ -163,5 +173,9 @@ const questions: Question[] = [
   const { stateful, stateless, defaults, extension }: Config = getConfig();
   const basePath: string = isClass ? stateful : stateless;
 
-  generateFiles(basePath, extension, getTemplates(defaults), name, isClass);
+  try {
+    generateFiles(basePath, extension, getTemplates(defaults), name, isClass);
+  } catch (e) {
+    console.error(e);
+  }
 })();
