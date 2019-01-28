@@ -53,8 +53,8 @@ const getTemplates = (path) => {
     const { resolve } = require("path");
     const files = readdirSync(path);
     const functions = files.reduce((acc, file) => {
-        const filePath = `./${path}/${file}`;
-        return Object.assign({}, acc, { [file]: require(resolve(filePath)) });
+        const filePath = `${path}/${file}`;
+        return Object.assign({}, acc, { [file]: require(filePath) });
     }, {});
     return {
         files,
