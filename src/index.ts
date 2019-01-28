@@ -96,7 +96,7 @@ const getTemplates = (path: string): GetTemplates => {
     const filePath: string = `./${path}/${file}`;
     return {
       ...acc,
-      [file]: require(resolve(filePath)),
+      [file]: require(filePath),
     };
   }, {});
 
