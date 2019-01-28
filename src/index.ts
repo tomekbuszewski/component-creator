@@ -1,6 +1,4 @@
-/**
- * Component bootstrapper
- */
+#!/usr/bin/env node
 
 enum QuestionTypes {
   text = "text",
@@ -110,16 +108,23 @@ const getTemplates = (path: string): GetTemplates => {
 
 const getConfig = (): Config => {
   const { resolve } = require("path");
-  const packageConfig: { bootstrap?: Config } = require(resolve("./package.json")).bootstrap;
+  const packageConfig: Config = require(resolve("./package.json")).bootstrap;
   const config = {
-    defaults: "defaults",
+    defaults: resolve(__dirname, "..", "defaults"),
     extension: "ts",
     stateful: "containers",
     stateless: "ui",
   };
 
   if (packageConfig) {
-    return { ...config, ...packageConfig };
+    if (packageConfig.defaults) {
+      return Object.assign({}, config, {
+        ...packageConfig,
+        defaults: resolve(packageConfig.defaults),
+      });
+    }
+
+    return Object.assign({}, config, packageConfig);
   }
 
   return config;

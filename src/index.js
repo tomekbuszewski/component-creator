@@ -1,6 +1,4 @@
-/**
- * Component bootstrapper
- */
+#!/usr/bin/env node
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -67,12 +65,15 @@ const getConfig = () => {
     const { resolve } = require("path");
     const packageConfig = require(resolve("./package.json")).bootstrap;
     const config = {
-        defaults: "defaults",
+        defaults: resolve(__dirname, "..", "defaults"),
         extension: "ts",
         stateful: "containers",
         stateless: "ui",
     };
     if (packageConfig) {
+        if (packageConfig.defaults) {
+            return Object.assign({}, config, Object.assign({}, packageConfig, { defaults: resolve(packageConfig.defaults) }));
+        }
         return Object.assign({}, config, packageConfig);
     }
     return config;
