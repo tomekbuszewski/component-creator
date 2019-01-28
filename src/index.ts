@@ -93,7 +93,7 @@ const getTemplates = (path: string): GetTemplates => {
 
   const files: string[] = readdirSync(path);
   const functions = files.reduce((acc: { [k: string]: string }, file: string) => {
-    const filePath: string = `./${path}/${file}`;
+    const filePath: string = `${path}/${file}`;
     return {
       ...acc,
       [file]: require(filePath),
