@@ -49,11 +49,11 @@ const fileExists = (file: string): boolean => {
   return existsSync(file);
 };
 
-const extractArgument = (argument: Arguments, arguments: string[] = process.argv): string => {
-  const argumentPosition: number = arguments.indexOf(argument);
+const extractArgument = (argument: Arguments, args: string[] = process.argv): string => {
+  const argumentPosition: number = args.indexOf(argument);
 
   if (argumentPosition >= 0) {
-    return arguments[argumentPosition + 1];
+    return args[argumentPosition + 1];
   }
 
   return "";
@@ -89,7 +89,6 @@ const createFile = (name: string, content: string = ""): boolean => {
 
 const getTemplates = (path: string): GetTemplates => {
   const { readdirSync } = require("fs");
-  const { resolve } = require("path");
 
   const files: string[] = readdirSync(path);
   const functions = files.reduce((acc: { [k: string]: string }, file: string) => {
@@ -106,14 +105,14 @@ const getTemplates = (path: string): GetTemplates => {
   };
 };
 
-const getConfig = (): Config => {
+const getConfig = (provided?: Config): Config => {
   const { resolve } = require("path");
-  const packageConfig: Config = require(resolve("./package.json")).bootstrap;
+  const packageConfig: Config = provided ? provided : require(resolve("./package.json")).bootstrap;
   const config = {
     defaults: resolve(__dirname, "..", "defaults"),
-    extension: "ts",
-    stateful: "containers",
-    stateless: "ui",
+    extension: "tsx",
+    stateful: "src/containers",
+    stateless: "src/ui",
   };
 
   if (packageConfig) {
@@ -171,16 +170,27 @@ const questions: Question[] = [
   },
 ];
 
-(async () => {
-  const prompts = require("prompts");
+if (require.main === module) {
+  (async () => {
+    const prompts = require("prompts");
 
-  const { name, isClass }: Answer = await prompts(questions);
-  const { stateful, stateless, defaults, extension }: Config = getConfig();
-  const basePath: string = isClass ? stateful : stateless;
+    const { name, isClass }: Answer = await prompts(questions);
+    const { stateful, stateless, defaults, extension }: Config = getConfig();
+    const basePath: string = isClass ? stateful : stateless;
 
-  try {
-    generateFiles(basePath, extension, getTemplates(defaults), name, isClass);
-  } catch (e) {
-    console.error(e);
-  }
-})();
+    try {
+      generateFiles(basePath, extension, getTemplates(defaults), name, isClass);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+}
+
+module.exports = {
+  createFile,
+  extractArgument,
+  fileExists,
+  generateFiles,
+  getConfig,
+  getTemplates,
+};

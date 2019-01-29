@@ -124,4 +124,12 @@ const questions = [
         console.error(e);
     }
 }))();
+module.exports = {
+    createFile,
+    extractArgument,
+    fileExists,
+    generateFiles,
+    getConfig,
+    getTemplates,
+};
 //# sourceMappingURL=index.js.map
