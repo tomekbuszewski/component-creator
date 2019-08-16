@@ -20,7 +20,7 @@ class ${name} extends React.Component<Props> {
   }
 }
 
-export default ${name};
+export { ${name} };
 `;
 
 module.exports = (name) => component(name);

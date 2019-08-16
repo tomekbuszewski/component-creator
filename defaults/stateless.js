@@ -13,15 +13,15 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const ${name} = (props: Props): React.ReactNode => (
+const ${name}Component = (props: Props): React.ReactNode => (
   <div>
     Hello
   </div>
 );
 
-const Styled${name} = styled(${name})\`\`;
+const ${name} = styled(${name}Component)\`\`;
 
-export default Styled${name};
+export { ${name} };
 `;
 
 module.exports = (name) => component(name);

@@ -1,7 +1,7 @@
 const component = (name) => `import * as React from "react";
 import renderer from "react-test-renderer";
 
-import ${name} from "./";
+import { ${name} } from "./";
 
 describe("${name} tests", () => {
   it ("should match snapshot", () => {

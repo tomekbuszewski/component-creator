@@ -80,17 +80,19 @@ const getConfig = () => {
 };
 const generateFiles = (basePath, extension, templates, name, isClass) => {
     const { files: initialTemplatesFiles, functions: templatesFn } = templates;
-    const templatesFiles = isClass
+    const templatesComponentFiles = isClass
         ? initialTemplatesFiles.filter((file) => file.indexOf("stateful") === 0)
         : initialTemplatesFiles.filter((file) => file.indexOf("stateless") === 0);
+    const indexFile = initialTemplatesFiles.filter((file) => file.indexOf("index") === 0);
+    const templatesFiles = templatesComponentFiles.concat(indexFile);
     const realExtension = extension.indexOf(".") === 0
         ? extension
         : `.${extension}`;
     templatesFiles.forEach((file) => {
         const strippedName = file
-            .replace(new RegExp(/stateless\.|stateful\./gm), "")
+            .replace(new RegExp(/stateless|stateful/gm), name)
             .replace(".js", realExtension);
-        const fileName = `${basePath}/${name}/${strippedName}`;
+            const fileName = `${basePath}/${name}/${strippedName}`;
         createFile(fileName, templatesFn[file](name, isClass));
     });
 };

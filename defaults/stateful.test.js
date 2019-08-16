@@ -2,7 +2,7 @@ const component = (name) => `import * as React from "react";
 
 import { shallow } from "enzyme";
 
-import ${name} from "./";
+import { ${name} } from "./";
 
 describe("${name} tests", () => {
   it("renders <${name} /> tree", () => {
